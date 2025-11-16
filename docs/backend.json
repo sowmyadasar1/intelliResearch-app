@@ -1,0 +1,152 @@
+{
+  "entities": {
+    "userProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's profile information.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The user's full name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "institution": {
+          "type": "string",
+          "description": "The user's affiliated institution."
+        },
+        "researchInterests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of the user's research interests."
+        }
+      },
+      "required": ["name", "email"]
+    },
+    "document": {
+      "title": "Document",
+      "description": "Represents an uploaded research paper or document.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the document."
+        },
+        "content": {
+          "type": "string",
+          "description": "The full text content of the document."
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "The UID of the user who owns the document."
+        },
+        "uploadedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the document was uploaded."
+        }
+      },
+      "required": ["title", "content", "ownerId", "uploadedAt"]
+    },
+    "chat": {
+      "title": "Chat Message",
+      "description": "A single message in a document chat.",
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": ["user", "assistant"],
+          "description": "The role of the message sender."
+        },
+        "content": {
+          "type": "string",
+          "description": "The content of the message."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the message."
+        }
+      },
+      "required": ["role", "content", "createdAt"]
+    },
+    "summary": {
+      "title": "Summary",
+      "description": "An AI-generated summary of a document.",
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "description": "The format of the generated summary."
+        },
+        "content": {
+          "type": "string",
+          "description": "The summary text."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the summary was created."
+        }
+      },
+      "required": ["format", "createdAt"]
+    },
+    "note": {
+      "title": "Note",
+      "description": "A user's personal note on a document.",
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "The content of the note."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The last updated timestamp of the note."
+        }
+      },
+      "required": ["content", "updatedAt"]
+    }
+  },
+  "auth": {
+    "providers": ["email"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/userProfile"
+      },
+      "description": "Stores user profile information."
+    },
+    "/users/{userId}/documents/{documentId}": {
+      "schema": {
+        "$ref": "#/entities/document"
+      },
+      "description": "Stores documents uploaded by users."
+    },
+    "/users/{userId}/documents/{documentId}/chats/{chatId}": {
+      "schema": {
+        "$ref": "#/entities/chat"
+      },
+      "description": "Stores chat messages for a specific document."
+    },
+    "/users/{userId}/documents/{documentId}/summaries/{summaryId}": {
+      "schema": {
+        "$ref": "#/entities/summary"
+      },
+      "description": "Stores AI-generated summaries for a document."
+    },
+    "/users/{userId}/documents/{documentId}/notes/{noteId}": {
+      "schema": {
+        "$ref": "#/entities/note"
+      },
+      "description": "Stores user's notes for a document."
+    }
+  }
+}
